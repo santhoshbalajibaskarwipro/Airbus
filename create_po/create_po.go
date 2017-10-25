@@ -166,7 +166,7 @@ func (t *Manage_po_order) create_po_order_id(stub shim.ChaincodeStubInterface, a
 	input := 	`{`+
 		`"sap_po_order": "` + sap_po_order + `" , `+
 		`"supplier": "` + supplier + `" , `+ 
-		`"wipro_order_reference": "` + wipro_order_reference + `" , `+ 
+		
 		`"venderso": "` + venderso + `"`+
 		`}`
 		fmt.Println("input: " + input)
