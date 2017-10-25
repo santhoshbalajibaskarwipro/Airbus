@@ -127,7 +127,7 @@ func (t *Manage_po_order) Query(stub shim.ChaincodeStubInterface, function strin
 
 	// Handle different functions
 	if function == "get_all_po_order" {													//Read all Forms
-		return t.get_all_proposal(stub, args)
+		return t.get_all_po_order(stub, args)
 	} 
 
 	fmt.Println("query did not find func: " + function)				//error
@@ -205,6 +205,50 @@ func (t *Manage_po_order) create_po_order_id(stub shim.ChaincodeStubInterface, a
 }
 
 
+
+func (t *Manage_po_order) get_all_po_order(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	
+	var jsonProposalResp,errResp string
+	var po_order_id_FormIndex []string
+	fmt.Println("Fetching All po order")
+	var err error
+	if len(args) != 1 {
+		return nil, errors.New("Incorrect number of arguments. Expecting single space as an argument")
+	}
+	// fetching all po order
+	po_order_id_FormIndexAsBytes, err := stub.GetState(approved_po_order_entry)
+	if err != nil {
+		return nil, errors.New("Failed to get all po order")
+	}
+	fmt.Print("po_order_id_FormIndexAsBytes : ")
+	fmt.Println(po_order_id_FormIndexAsBytes)
+	json.Unmarshal(po_order_id_FormIndexAsBytes, &po_order_id_FormIndex)								//un stringify it aka JSON.parse()
+	fmt.Print("po_order_id_FormIndex : ")
+	fmt.Println(po_order_id_FormIndex)
+	// Proposal Data
+	jsonProposalResp = "{"
+	for i,val := range po_order_id_FormIndex{
+		fmt.Println(strconv.Itoa(i) + " - looking at " + val + " for all Proposal")
+		valueAsBytes, err := stub.GetState(val)
+		if err != nil {
+			errResp = "{\"Error\":\"Failed to get state for " + val + "\"}"
+			return nil, errors.New(errResp)
+		}
+		fmt.Print("valueAsBytes : ")
+		fmt.Println(valueAsBytes)
+		jsonProposalResp = jsonProposalResp + "\""+ val + "\":" + string(valueAsBytes[:])
+		if i < len(proposal_id_FormIndex)-1 {
+			jsonProposalResp = jsonProposalResp + ","
+		}
+	}
+	fmt.Println("len(po_order_id_FormIndex) : ")
+	fmt.Println(len(po_order_id_FormIndex))
+
+	jsonProposalResp = jsonProposalResp + "}"
+	fmt.Println([]byte(jsonProposalResp))
+	fmt.Println("Fetched All proposal Forms successfully.")
+	return []byte(jsonProposalResp), nil
+}
 
 
 
