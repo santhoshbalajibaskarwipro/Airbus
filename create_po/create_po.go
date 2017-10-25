@@ -237,7 +237,7 @@ func (t *Manage_po_order) get_all_po_order(stub shim.ChaincodeStubInterface, arg
 		fmt.Print("valueAsBytes : ")
 		fmt.Println(valueAsBytes)
 		jsonProposalResp = jsonProposalResp + "\""+ val + "\":" + string(valueAsBytes[:])
-		if i < len(proposal_id_FormIndex)-1 {
+		if i < len(po_order_id_FormIndex)-1 {
 			jsonProposalResp = jsonProposalResp + ","
 		}
 	}
