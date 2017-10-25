@@ -27,26 +27,17 @@ import (
 //"github.com/hyperledger/fabric/core/util"
 )
 
-// Proposal example simple Chaincode implementation
+// Po order example simple Chaincode implementation
 type Manage_po_order struct {
 }
 
 var approved_po_order_entry = "approved_po_order_entry"	
-type proposal struct{
+type po_order struct{
 								// Attributes of a Form 
-	proposal_id string `json:"proposal_id"`	
-	region string `json:"region"`
-	country string `json:"country"`
-	proposal_type string `json:"proposal_type"`
-	proposal_date string `json:"proposal_date"`
-	approval_date string `json:"approval_date"`
-	shared_with_procurement_team_on string `json:"shared_with_procurement_team_on"`
-	approver string `json:"approver"`
-	number_of_tasks_covered string `json:"number_of_tasks_covered"`
-	device_qty string `json:"device_qty"`
-	accessary_periperal_qty string `json:"accessary_periperal_qty"`
-	total_qty string `json:"total_qty"`
-	status string `json:"status"`
+	sap_po_order string `json:"sap_po_order"`	
+	supplier string `json:"supplier"`
+	venderso string `json:"venderso"`
+	
 	
 }
 
@@ -146,8 +137,72 @@ func (t *Manage_po_order) Query(stub shim.ChaincodeStubInterface, function strin
 
 
 
+func (t *Manage_po_order) create_po_order_id(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	var err error
+	if len(args) != 3 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 9")
+	}
+	fmt.Println("Creating a new Form for po order id ")
+	if len(args[0]) <= 0 {
+		return nil, errors.New("1st argument must be a non-empty string")
+	}
+	if len(args[1]) <= 0 {
+		return nil, errors.New("2nd argument must be a non-empty string")
+	}
+	if len(args[2]) <= 0 {
+		return nil, errors.New("3rd argument must be a non-empty string")
+	}
+	
+	
+	sap_po_order := args[0]
+	supplier := args[1]
+	venderso := args[2]
+		
+	
+		
+	//build the Form json string manually
+	input := 	`{`+
+		`"sap_po_order": "` + sap_po_order + `" , `+
+		`"supplier": "` + supplier + `" , `+ 
+		`"venderso": "` + venderso + `"`+
+		`}`
+		fmt.Println("input: " + input)
+		fmt.Print("input in bytes array: ")
+		fmt.Println([]byte(input))
+	err = stub.PutState(sap_po_order, []byte(input))									//store Form with FAA_formNumber as key
+	if err != nil {
+		return nil, err
+	}
+	
 
+	
+	po_order_id_FormIndexAsBytes, err := stub.GetState(approved_po_order_entry)
+	if err != nil {
+		return nil, errors.New("Failed to get po order id  Form index")
+	}
+	var po_order_id_FormIndex []string
+	fmt.Print("po_order_id_FormIndexAsBytes: ")
+	fmt.Println(po_order_id_FormIndexAsBytes)
+	
+	json.Unmarshal(po_order_id_FormIndexAsBytes, &po_order_id_FormIndex)							//un stringify it aka JSON.parse()
+	fmt.Print("po_order_id_FormIndex after unmarshal..before append: ")
+	fmt.Println(po_order_id_FormIndex)
+	//append
+	po_order_id_FormIndex = append(po_order_id_FormIndex, sap_po_order)									//add Form transID to index list
+	fmt.Println("! po order  Form index after appending po order id: ", po_order_id_FormIndex)
+	jsonAsBytes, _ := json.Marshal(po_order_id_FormIndex)
+	fmt.Print("jsonAsBytes: ")
+	fmt.Println(jsonAsBytes)
+	err = stub.PutState(approved_po_order_entry, jsonAsBytes)						//store name of Form
+	if err != nil {
+		return nil, err
+	}
 
+	fmt.Println("Po order  created successfully.")
+	return nil, nil
+	
+	
+}
 
 
 
