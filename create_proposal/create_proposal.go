@@ -207,10 +207,8 @@ func (t *ManageProposal) create_proposal_id(stub shim.ChaincodeStubInterface, ar
 		`"device_qty": "` + device_qty + `" , `+ 
 		`"accessary_periperal_qty": "` + accessary_periperal_qty + `" , `+ 
 		`"total_qty": "` + total_qty + `" , `+ 
-		`"status": "` + status + `"` +
+		`"status": "` + status + `"` +		
 		
-	
-	
 		`}`
 		fmt.Println("input: " + input)
 		fmt.Print("input in bytes array: ")
