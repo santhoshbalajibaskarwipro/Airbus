@@ -139,7 +139,7 @@ func (t *Manage_po_order) Query(stub shim.ChaincodeStubInterface, function strin
 
 func (t *Manage_po_order) create_po_order_id(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var err error
-	if len(args) != 3 {
+	if len(args) != 4 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 9")
 	}
 	fmt.Println("Creating a new Form for po order id ")
@@ -159,7 +159,7 @@ func (t *Manage_po_order) create_po_order_id(stub shim.ChaincodeStubInterface, a
 	sap_po_order := args[0]
 	supplier := args[1]
 	venderso := args[2]
-	//wipro_order_reference := arg[3]	
+	wipro_order_reference := arg[3]	
 	
 		
 	//build the Form json string manually
