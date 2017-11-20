@@ -121,6 +121,10 @@ func (t *ManagePurchaseOrder) Query(stub shim.ChaincodeStubInterface, function s
 	  else if function == "get_all_purchase_order_id" {													//Read all Forms
 		return t.get_all_purchase_order_id(stub, args)
 	} 
+	else
+	{
+		fmt.Println(" did not find func: " + function)
+	}
 
 	fmt.Println("query did not find func: " + function)				//error
 	jsonResp := "Error : Received unknown function query: "+ function 
