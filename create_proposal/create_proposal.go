@@ -43,7 +43,7 @@ type proposal struct{
 	proposal_type string `json:"proposal_type"`
 	initiated_on string `json:"initiated_on"`
 	euc_reviewed_on string `json:"euc_reviewed_on"`
-	shared_with_sd_&_a_on string `json:"shared_with_sd_&_a_on"`
+	shared_with_sd_and_a_on string `json:"shared_with_sd_and_a_on"`
 	approval_on string `json:"approval_on"`
 	shared_with_procurement_team_on string `json:"shared_with_procurement_team_on"`
 	number_of_tasks_covered string `json:"number_of_tasks_covered"`
@@ -165,7 +165,7 @@ func (t *ManageProposal) create_proposal_id(stub shim.ChaincodeStubInterface, ar
 	
 	initiated_on := args[4]
 	euc_reviewed_on := args[5]
-	shared_with_sd_&_a_on := args[6]
+	shared_with_sd_and_a_on := args[6]
 	approval_on := args[7]
 	
 	shared_with_procurement_team_on := args[8]
@@ -191,7 +191,7 @@ func (t *ManageProposal) create_proposal_id(stub shim.ChaincodeStubInterface, ar
 				`"initiated_on": "` + initiated_on + `" , `+ 
 			
 	        `"euc_reviewed_on": "` + euc_reviewed_on + `" , `+ 
-			`"shared_with_sd_&_a_on"": "` + shared_with_sd_&_a_on" + `" , `+ 
+			`"shared_with_sd_and_a_on"": "` + shared_with_sd_and_a_on" + `" , `+ 
 			
 			
 			
