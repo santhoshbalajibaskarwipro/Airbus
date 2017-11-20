@@ -28,7 +28,7 @@ type purchase_order struct{
 	
 	
 	
-	unique_proposal_purchase_id  `json:"unique_proposal_purchase_id"`								
+	unique_proposal_purchase_id string `json:"unique_proposal_purchase_id"`								
 	proposal_id string `json:"proposal_id"`	
 	purchase_order_no string `json:"purchase_order_no"`	
 	sales_order_no string `json:"sales_order_no"`
