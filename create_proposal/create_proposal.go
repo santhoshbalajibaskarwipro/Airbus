@@ -191,8 +191,7 @@ func (t *ManageProposal) create_proposal_id(stub shim.ChaincodeStubInterface, ar
 				`"initiated_on": "` + initiated_on + `" , `+ 
 			
 	        `"euc_reviewed_on": "` + euc_reviewed_on + `" , `+ 
-			`"shared_with_sd_and_a_on"": "` + shared_with_sd_and_a_on" + `" , `+ 
-			
+			`"shared_with_sd_and_a_on": "` + shared_with_sd_and_a_on + `" , `+ 
 			
 			
 			
