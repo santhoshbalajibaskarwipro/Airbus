@@ -118,7 +118,7 @@ func (t *ManagePurchaseOrder) Query(stub shim.ChaincodeStubInterface, function s
 	if function == "get_all_purchase_order_data" {													//Read all Forms
 		return t.get_all_purchase_order_data(stub, args)
 	} 
-	  else if function == "get_all_purchase_order_id" {													//Read all Forms
+	 if function == "get_all_purchase_order_id" {													//Read all Forms
 		return t.get_all_purchase_order_id(stub, args)
 	  }
 	
