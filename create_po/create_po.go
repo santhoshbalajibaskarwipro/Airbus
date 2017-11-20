@@ -266,7 +266,6 @@ func (t *ManagePurchaseOrder) get_all_purchase_order_data(stub shim.ChaincodeStu
 }
 
 
-/*
 func (t *ManagePurchaseOrder) get_all_purchase_order_id(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	
 	var jsonPurchaseResp,errResp string
@@ -310,4 +309,4 @@ func (t *ManagePurchaseOrder) get_all_purchase_order_id(stub shim.ChaincodeStubI
 	fmt.Println("Fetched All PO ID successfully.")
 	return []byte(jsonPurchaseResp), nil
 }
-*/
+
