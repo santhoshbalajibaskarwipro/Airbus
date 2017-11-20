@@ -1,19 +1,7 @@
-/*/*
--a-Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license Forms.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-  http://www.apache.org/licenses/LICENSE-2.0 
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
-*/
+/***** Project ChainDaaS - Phase0 - SRC - UI1 for Creation Purchase Order ***/
+/*** Last updated on 16th Nov 2017 15:00 pm by Abhishek Kumar ***/
+/*** github link :: https://github.com/abhi-005/Phase0ChainCode/create_purchase_order/ ***/
+/*** File name create_purchase_order.go ***/
 
 package main
 
@@ -27,42 +15,46 @@ import (
 //"github.com/hyperledger/fabric/core/util"
 )
 
-// Po order example simple Chaincode implementation
-type Manage_po_order struct {
+// Proposal example simple Chaincode implementation
+type ManagePurchaseOrder struct {
 }
 
-var approved_po_order_entry = "approved_po_order_entry"	
-type po_order struct{
-								// Attributes of a Form 
-	sap_po_order string `json:"sap_po_order"`	
-	supplier string `json:"supplier"`
-	venderso string `json:"venderso"`
-	wipro_order_reference string `json:"wipro_order_reference"`
+var approved_purchase_order_entry = "approved_purchase_order_entry"				//name for the key/value that will store a list of all known  Tier3 Form
+
+type purchase_order struct{ 
+								// Attributes of a Purchase Form 
+	serial_no string `json:"serial_no"`
+	proposal_id string `json:"proposal_id"`	
+	purchase_order_no string `json:"purchase_order_no"`
+	work_order_ref string `json:"work_oder_ref"`
+	manufacturer_code string `json:"manufacturer_code"`
+	
+	sales_order_no string `json:"sales_order_no"`
+	order_date string `json:"order_date"`
+	egiss_company string `json:"egiss_company"`
+	
+	ship_to_post_code string `json:"ship_to_post_code"`
+	ship_to_city string `json:"ship_to_city"`
+	qty string `json:"qty"`
+	accessary_qty string `json:"accessary_qty"`
+	total_qty string `json:"total_qty"`
+	status string `json:"status"`
+	
 	
 }
-
-
-
-
-
 // ============================================================================================================================
 // Main - start the chaincode for Form management
 // ============================================================================================================================
 func main() {			
-	err := shim.Start(new(Manage_po_order))
+	err := shim.Start(new(ManagePurchaseOrder))
 	if err != nil {
-		fmt.Printf("Error starting Form management of po order chaincode: %s", err)
+		fmt.Printf("Error starting Form Purchase order chaincode: %s", err)
 	}
 }
-
-
-
-
-
 // ============================================================================================================================
 // Init - reset all the things
 // ============================================================================================================================
-func (t *Manage_po_order) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *ManagePurchaseOrder) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	var msg string
 	var err error
 	if len(args) != 1 {
@@ -70,65 +62,58 @@ func (t *Manage_po_order) Init(stub shim.ChaincodeStubInterface, function string
 	}
 	// Initialize the chaincode
 	msg = args[0]
-	fmt.Println("Manage Po Order chaincode is deployed successfully.");
+	fmt.Println("ManagePurchaseOrder chaincode is deployed successfully.");
 	
 	// Write the state to the ledger
 	err = stub.PutState("abc", []byte(msg))	//making a test var "abc", I find it handy to read/write to it right away to test the network
 	if err != nil {
 		return nil, err
 	}
-	var po_order_form_empty []string
-	po_order_form_empty_json_as_bytes, _ := json.Marshal(po_order_form_empty)								//marshal an emtpy array of strings to clear the index
-	err = stub.PutState(approved_po_order_entry, po_order_form_empty_json_as_bytes)
+	var purchase_order_form_empty []string
+	purchase_order_form_empty_json_as_bytes, _ := json.Marshal(purchase_order_form_empty)								//marshal an emtpy array of strings to clear the index
+	err = stub.PutState(approved_purchase_order_entry, purchase_order_form_empty_json_as_bytes)
 	if err != nil {
 		return nil, err
 	}
 	return nil, nil
 }
-
-
-
-
 // ============================================================================================================================
 // Run - Our entry Formint for Invocations - [LEGACY] obc-peer 4/25/2016
 // ============================================================================================================================
-func (t *Manage_po_order) Run(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *ManagePurchaseOrder) Run(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("run is running " + function)
 	return t.Invoke(stub, function, args)
 }
-
-
-
-
 // ============================================================================================================================
 // Invoke - Our entry Formint for Invocations
 // ============================================================================================================================
-func (t *Manage_po_order) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *ManagePurchaseOrder) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("invoke is running " + function)
 
 	// Handle different functions
 	if function == "init" {													//initialize the chaincode state, used as reset
 		return t.Init(stub, "init", args)
-	} else if function == "create_po_order_id" {											//create a new Form
-		return t.create_po_order_id(stub, args)
+	} else if function == "create_purchase_order_id" {											//create a new Form
+		return t.create_purchase_order_id(stub, args)
 	} 
 	fmt.Println("invoke did not find func: " + function)	
 	jsonResp := "Error : Received unknown function invocation: "+ function 				//error
 	return nil, errors.New(jsonResp)
 }
 
-
-
 // ============================================================================================================================
 // Query - Our entry for Queries
 // ============================================================================================================================
-func (t *Manage_po_order) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *ManagePurchaseOrder) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("Query is running " + function)
 
 	// Handle different functions
-	if function == "get_all_po_order" {													//Read all Forms
-		return t.get_all_po_order(stub, args)
-	} 
+	if function == "get_all_purchase_order_data" {													//Read all Forms
+		return t.get_all_purchase_order_data(stub, args)
+	} /*
+	  else if function == "get_all_purchase_order_id" {													//Read all Forms
+		return t.get_all_purchase_order_id(stub, args)
+	} */
 
 	fmt.Println("query did not find func: " + function)				//error
 	jsonResp := "Error : Received unknown function query: "+ function 
@@ -136,72 +121,98 @@ func (t *Manage_po_order) Query(stub shim.ChaincodeStubInterface, function strin
 }
 
 
-
-func (t *Manage_po_order) create_po_order_id(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+// ============================================================================================================================
+// create Form - create a new Form for purchase id, store into chaincode state
+// ============================================================================================================================
+func (t *ManagePurchaseOrder) create_purchase_order_id(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var err error
-	if len(args) != 4 {
-		return nil, errors.New("Incorrect number of arguments. Expecting 9")
+	if len(args) != 14 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 13 ")
 	}
-	fmt.Println("Creating a new Form for po order id ")
+	fmt.Println("Creating a new Form for proposal id ")
 	if len(args[0]) <= 0 {
 		return nil, errors.New("1st argument must be a non-empty string")
 	}
 	if len(args[1]) <= 0 {
 		return nil, errors.New("2nd argument must be a non-empty string")
 	}
-	if len(args[2]) <= 0 {
-		return nil, errors.New("3rd argument must be a non-empty string")
-	}
-	if len(args[3]) <= 0 {
-		return nil, errors.New("4th argument must be a non-empty string")
-	}
 	
-	sap_po_order := args[0]
-	supplier := args[1]
-	venderso := args[2]
-	wipro_order_reference := arg[3]	
 	
-		
+	
+	proposal_id := args[0]
+	purchase_order_id := args[1]
+	work_order_ref := args[2]
+	manufacturer_code := args[3]
+	
+	sales_order_no := args[4]
+	order_date := args[5]
+	egiss_company := args[6]
+	
+	
+	
+	ship_to_post_code := args[7]
+	ship_to_city := args[8]
+	qty := args[9]
+	accessary_qty := args[10]
+	total_qty := args[11]
+	status := args[12]	
+	
+	serial_no :=args[13]
 	//build the Form json string manually
 	input := 	`{`+
-		`"sap_po_order": "` + sap_po_order + `" , `+
-		`"supplier": "` + supplier + `" , `+ 
-		
-		`"venderso": "` + venderso + `"`+
+		`"serial_no": "` + serial_no + `" , `+
+		`"proposal_id": "` + proposal_id + `" , `+
+		`"purchase_order_id": "` + purchase_order_id + `" , `+ 
+		`"work_order_ref": "` + work_order_ref + `" , `+
+	        `"manufacturer_code": "` + manufacturer_code + `" , `+ 
+	
+	
+	        `"sales_order_no": "` + sales_order_no + `" , `+ 
+		`"order_date": "` + order_date + `" , `+ 
+		`"egiss_company": "` + egiss_company + `" , `+ 
+	
+		`"ship_to_post_code": "` + ship_to_post_code + `" , `+ 
+		`"ship_to_city": "` + ship_to_city + `" , `+ 
+		`"qty": "` + qty + `" , `+ 
+		`"accessary_qty": "` + accessary_qty + `" , `+ 
+		`"total_qty": "` + total_qty + `" , `+ 
+		`"status": "` + status + `"` +	
+	
 		`}`
+	
 		fmt.Println("input: " + input)
 		fmt.Print("input in bytes array: ")
 		fmt.Println([]byte(input))
-	err = stub.PutState(sap_po_order, []byte(input))									//store Form with FAA_formNumber as key
+	err = stub.PutState(serial_no, []byte(input))					//store Form with Serial_no as key
 	if err != nil {
 		return nil, err
 	}
 	
 
 	
-	po_order_id_FormIndexAsBytes, err := stub.GetState(approved_po_order_entry)
+	purchase_order_id_FormIndexAsBytes, err := stub.GetState(approved_purchase_order_entry)
 	if err != nil {
-		return nil, errors.New("Failed to get po order id  Form index")
+		return nil, errors.New("Failed to get proposal id  Form index")
 	}
-	var po_order_id_FormIndex []string
-	fmt.Print("po_order_id_FormIndexAsBytes: ")
-	fmt.Println(po_order_id_FormIndexAsBytes)
+	var purchase_order_id_FormIndex []string
+	fmt.Print("purchase_order_id_FormIndexAsBytes: ")
+	fmt.Println(purchase_order_id_FormIndexAsBytes)
 	
-	json.Unmarshal(po_order_id_FormIndexAsBytes, &po_order_id_FormIndex)							//un stringify it aka JSON.parse()
-	fmt.Print("po_order_id_FormIndex after unmarshal..before append: ")
-	fmt.Println(po_order_id_FormIndex)
+	json.Unmarshal(purchase_order_id_FormIndexAsBytes, &purchase_order_id_FormIndex)							//un stringify it aka JSON.parse()
+	fmt.Print("purchase_order_id_FormIndex after unmarshal..before append: ")
+	fmt.Println(purchase_order_id_FormIndex)
 	//append
-	po_order_id_FormIndex = append(po_order_id_FormIndex, sap_po_order)									//add Form transID to index list
-	fmt.Println("! po order  Form index after appending po order id: ", po_order_id_FormIndex)
-	jsonAsBytes, _ := json.Marshal(po_order_id_FormIndex)
+	purchase_order_id_FormIndex = append(purchase_order_id_FormIndex, serial_no)									//add Form transID to index list
+	fmt.Println("! Purchase Order  Form index after appending po id: ", purchase_order_id_FormIndex)
+	jsonAsBytes, _ := json.Marshal(purchase_order_id_FormIndex)
 	fmt.Print("jsonAsBytes: ")
 	fmt.Println(jsonAsBytes)
-	err = stub.PutState(approved_po_order_entry, jsonAsBytes)						//store name of Form
+	err = stub.PutState(approved_purchase_order_entry, jsonAsBytes)						//store name of Form
 	if err != nil {
 		return nil, err
 	}
 
-	fmt.Println("Po order  created successfully.")
+	fmt.Println("Purchase Order Form created successfully.")
 	return nil, nil
 	
 	
@@ -209,29 +220,29 @@ func (t *Manage_po_order) create_po_order_id(stub shim.ChaincodeStubInterface, a
 
 
 
-func (t *Manage_po_order) get_all_po_order(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *ManagePurchaseOrder) get_all_purchase_order_data(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	
-	var jsonProposalResp,errResp string
-	var po_order_id_FormIndex []string
-	fmt.Println("Fetching All po order")
+	var jsonPurchaseResp,errResp string
+	var purchase_order_id_FormIndex []string
+	fmt.Println("Fetching All Purchase Order")
 	var err error
 	if len(args) != 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting single space as an argument")
 	}
-	// fetching all po order
-	po_order_id_FormIndexAsBytes, err := stub.GetState(approved_po_order_entry)
+	// fetching all Purchase ORder
+	purchase_order_id_FormIndexAsBytes, err := stub.GetState(approved_purchase_order_entry)
 	if err != nil {
-		return nil, errors.New("Failed to get all po order")
+		return nil, errors.New("Failed to get all Purchase Order")
 	}
-	fmt.Print("po_order_id_FormIndexAsBytes : ")
-	fmt.Println(po_order_id_FormIndexAsBytes)
-	json.Unmarshal(po_order_id_FormIndexAsBytes, &po_order_id_FormIndex)								//un stringify it aka JSON.parse()
-	fmt.Print("po_order_id_FormIndex : ")
-	fmt.Println(po_order_id_FormIndex)
-	// Proposal Data
-	jsonProposalResp = "{"
-	for i,val := range po_order_id_FormIndex{
-		fmt.Println(strconv.Itoa(i) + " - looking at " + val + " for all Proposal")
+	fmt.Print("purchase_order_id_FormIndexAsBytes : ")
+	fmt.Println(purchase_order_id_FormIndexAsBytes)
+	json.Unmarshal(purchase_order_id_FormIndexAsBytes, &purchase_order_id_FormIndex)								//un stringify it aka JSON.parse()
+	fmt.Print("purchase_order_id_FormIndex : ")
+	fmt.Println(purchase_order_id_FormIndex)
+	// Purchase Order Data
+	jsonPurchaseResp = "{"
+	for i,val := range purchase_order_id_FormIndex{
+		fmt.Println(strconv.Itoa(i) + " - looking at " + val + " for all Purchase")
 		valueAsBytes, err := stub.GetState(val)
 		if err != nil {
 			errResp = "{\"Error\":\"Failed to get state for " + val + "\"}"
@@ -239,22 +250,63 @@ func (t *Manage_po_order) get_all_po_order(stub shim.ChaincodeStubInterface, arg
 		}
 		fmt.Print("valueAsBytes : ")
 		fmt.Println(valueAsBytes)
-		jsonProposalResp = jsonProposalResp + "\""+ val + "\":" + string(valueAsBytes[:])
-		if i < len(po_order_id_FormIndex)-1 {
-			jsonProposalResp = jsonProposalResp + ","
+		jsonPurchaseResp = jsonPurchaseResp + "\""+ val + "\":" + string(valueAsBytes[:])
+		if i < len(purchase_order_id_FormIndex)-1 {
+			jsonPurchaseResp = jsonPurchaseResp + ","
 		}
 	}
-	fmt.Println("len(po_order_id_FormIndex) : ")
-	fmt.Println(len(po_order_id_FormIndex))
+	fmt.Println("len(purchase_order_id_FormIndex) : ")
+	fmt.Println(len(purchase_order_id_FormIndex))
 
-	jsonProposalResp = jsonProposalResp + "}"
-	fmt.Println([]byte(jsonProposalResp))
-	fmt.Println("Fetched All proposal Forms successfully.")
-	return []byte(jsonProposalResp), nil
+	jsonPurchaseResp = jsonPurchaseResp + "}"
+	fmt.Println([]byte(jsonPurchaseResp))
+	fmt.Println("Fetched All Proposal Data successfully.")
+	return []byte(jsonPurchaseResp), nil
 }
 
 
+/*
+func (t *ManagePurchaseOrder) get_all_purchase_order_id(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	
+	var jsonPurchaseResp,errResp string
+	var purchase_order_id_FormIndex []string
+	fmt.Println("Fetching All Purchase Order")
+	var err error
+	if len(args) != 1 {
+		return nil, errors.New("Incorrect number of arguments. Expecting single space as an argument")
+	}
+	// fetching all Purchase 
+	purchase_order_id_FormIndexAsBytes, err := stub.GetState(approved_purchase_order_entry)
+	if err != nil {
+		return nil, errors.New("Failed to get all Purchase Orders")
+	}
+	fmt.Print("purchase_order_id_FormIndexAsBytes : ")
+	fmt.Println(purchase_order_id_FormIndexAsBytes)
+	json.Unmarshal(purchase_order_id_FormIndexAsBytes, &purchase_order_id_FormIndex)								//un stringify it aka JSON.parse()
+	fmt.Print("purchase_order_id_FormIndex : ")
+	fmt.Println(purchase_order_id_FormIndex)
+	// Proposal Data
+	jsonPurchaseResp = "{ "
+	for i,val := range purchase_order_id_FormIndex{
+		fmt.Println(strconv.Itoa(i) + " - looking at " + val + " for all Purchase Order")
+		valueAsBytes, err := stub.GetState(val)
+		if err != nil {
+			errResp = "{\"Error\":\"Failed to get state for " + val + "\"}"
+			return nil, errors.New(errResp)
+		}
+		fmt.Print("valueAsBytes : ")
+		fmt.Println(valueAsBytes)
+		jsonPurchaseResp = jsonPurchaseResp + "\""+ val + "\""
+		if i < len(purchase_order_id_FormIndex)-1 {
+			jsonPurchaseResp = jsonPurchaseResp + ","
+		}
+	}
+	fmt.Println("len(purchase_order_id_FormIndex) : ")
+	fmt.Println(len(purchase_order_id_FormIndex))
 
-
-
-
+	jsonPurchaseResp = jsonPurchaseResp + "}"
+	fmt.Println([]byte(jsonPurchaseResp))
+	fmt.Println("Fetched All PO ID successfully.")
+	return []byte(jsonPurchaseResp), nil
+}
+*/
