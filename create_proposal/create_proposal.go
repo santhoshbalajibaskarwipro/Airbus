@@ -184,7 +184,7 @@ func (t *ManageProposal) create_proposal_id(stub shim.ChaincodeStubInterface, ar
 	input := 	`{`+
 		`"proposal_id": "` + proposal_id + `" , `+
 		`"region": "` + region + `" , `+ 
-		`"country": "` + country + `"`+
+		`"country": "` + country + `" , `+
 	        `"proposal_type": "` + proposal_type + `" , `+ 
 				
 				
