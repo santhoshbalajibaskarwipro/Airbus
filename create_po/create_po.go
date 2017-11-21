@@ -1,7 +1,6 @@
 /***** Project ChainDaaS - Phase0 - SRC - UI1 for Creation Purchase Order ***/
-/*** Last updated on 16th Nov 2017 15:00 pm by Abhishek Kumar ***/
-/*** github link :: https://github.com/abhi-005/Phase0ChainCode/create_purchase_order/ ***/
-/*** File name create_purchase_order.go ***/
+/*** Last updated on 21st Nov 2017  by Santhosh Balaji ***/
+
 
 package main
 
@@ -284,7 +283,7 @@ func (t *ManagePurchaseOrder) get_all_purchase_order_id(stub shim.ChaincodeStubI
 	fmt.Print("purchase_order_id_FormIndex : ")
 	fmt.Println(purchase_order_id_FormIndex)
 	// Proposal Data
-	jsonPurchaseResp = "{ "
+	jsonPurchaseResp = "{"
 	for i,val := range purchase_order_id_FormIndex{
 		fmt.Println(strconv.Itoa(i) + " - looking at " + val + " for all Purchase Order")
 		valueAsBytes, err := stub.GetState(val)
