@@ -28,19 +28,18 @@ type purchase_order struct{
 	
 	
 	unique_proposal_purchase_id string `json:"unique_proposal_purchase_id"`								
-	proposal_id string `json:"proposal_id"`	
-	purchase_order_no string `json:"purchase_order_no"`	
-	sales_order_no string `json:"sales_order_no"`
-	ship_to_country_code string `json:"ship_to_country_code_code"`
-	ship_to_city string `json:"ship_to_city"`
-	ship_to_post_code string `json:"ship_to_post_code"`
-	order_date string `json:"order_date"`
-	manufacturer_code string `json:"manufacturer_code"`
-	item_category string `json:"item_category"`
-	item_no string `json:"item_no"`
-	quantity string `json:"quantity"`
-	egiss_company string `json:"egiss_company"`
-	status string `json:"status"`
+	ProposalID string `json:"ProposalID"`	
+	Location string `json:"Location"`	
+	City string `json:"City"`
+	PartNumber string `json:"PartNumber_code"`
+	PartDescription string `json:"PartDescription"`
+	WiproOrderReference string `json:"WiproOrderReference"`
+	Vendor string `json:"Vendor"`
+	VendorSO string `json:"VendorSO"`
+	OrderDate string `json:"OrderDate"`
+	OrderedQuantity string `json:"OrderedQuantity"`
+	Status string `json:"Status"`
+
 	
 	
 	
@@ -130,8 +129,8 @@ func (t *ManagePurchaseOrder) Query(stub shim.ChaincodeStubInterface, function s
 // ============================================================================================================================
 func (t *ManagePurchaseOrder) create_purchase_order_id(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var err error
-	if len(args) != 14 {
-		return nil, errors.New("Incorrect number of arguments. Expecting 13 ")
+	if len(args) != 12 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 12 ")
 	}
 	fmt.Println("Creating a new Form for proposal id ")
 	if len(args[0]) <= 0 {
@@ -145,37 +144,38 @@ func (t *ManagePurchaseOrder) create_purchase_order_id(stub shim.ChaincodeStubIn
 	
 	
 	
+	
+	
+	
+	
 	unique_proposal_purchase_id :=args[0]
-	proposal_id := args[1]
-	purchase_order_no := args[2]
-	sales_order_no := args[3]
-	ship_to_country_code := args[4]
-	ship_to_city := args[5]
-	ship_to_post_code := args[6]
-	order_date := args[7]
-	manufacturer_code := args[8]
-	item_category :=args[9]
-	item_no :=args[10]
-	quantity := args[11]
-	egiss_company := args[12]
-	status := args[13]	
+	ProposalID := args[1]
+	Location := args[2]
+	City := args[3]
+	PartNumber := args[4]
+	PartDescription := args[5]
+	WiproOrderReference := args[6]
+	Vendor := args[7]
+	VendorSO := args[8]
+	OrderDate :=args[9]
+	OrderedQuantity :=args[10]
+	Status := args[11]
+	
 	
 	//build the Form json string manually
 	input := 	`{`+
 		`"unique_proposal_purchase_id": "` + unique_proposal_purchase_id + `" , `+
-		`"proposal_id": "` + proposal_id + `" , `+
-		`"purchase_order_no": "` + purchase_order_no + `" , `+ 
-		`"sales_order_no": "` + sales_order_no + `" , `+ 
-		`"ship_to_country_code": "` + ship_to_country_code + `" , `+ 
-		`"ship_to_city": "` + ship_to_city + `" , `+ 
-		`"ship_to_post_code": "` + ship_to_post_code + `" , `+
-		`"order_date": "` + order_date + `" , `+ 
-		`"manufacturer_code": "` + manufacturer_code + `" , `+ 
-		`"item_category": "` + item_category + `" , `+
-		`"item_no": "` + item_no + `" , `+
-		`"quantity": "` + quantity + `" , `+
-		`"egiss_company": "` + egiss_company + `" , `+ 
-		`"status": "` + status + `"` +	
+		`"ProposalID": "` + ProposalID + `" , `+
+		`"Location": "` + Location + `" , `+ 
+		`"City": "` + City + `" , `+ 
+		`"PartNumber": "` + PartNumber + `" , `+ 
+		`"PartDescription": "` + PartDescription + `" , `+ 
+		`"WiproOrderReference": "` + WiproOrderReference + `" , `+
+		`"Vendor": "` + Vendor + `" , `+ 
+		`"VendorSO": "` + VendorSO + `" , `+ 
+		`"OrderDate": "` + OrderDate + `" , `+
+		`"OrderedQuantity": "` + OrderedQuantity + `" , `+
+		`"Status": "` + Status + `"` +	
 		`}`
 	
 		fmt.Println("input: " + input)
