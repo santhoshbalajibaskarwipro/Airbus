@@ -282,7 +282,7 @@ func (t *ManagePurchaseOrder) get_all_purchase_order_id(stub shim.ChaincodeStubI
 	json.Unmarshal(purchase_order_id_FormIndexAsBytes, &purchase_order_id_FormIndex)								//un stringify it aka JSON.parse()
 	fmt.Print("purchase_order_id_FormIndex : ")
 	fmt.Println(purchase_order_id_FormIndex)
-	// Proposal Data
+	//  Proposal Data
 	jsonPurchaseResp = "{"
 	for i,val := range purchase_order_id_FormIndex{
 		fmt.Println(strconv.Itoa(i) + " - looking at " + val + " for all Purchase Order")
