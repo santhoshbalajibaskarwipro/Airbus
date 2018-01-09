@@ -24,8 +24,7 @@ type purchase_order struct{
 								// Attributes of a Purchase Form 
 								
 								
-	
-	
+	 
 	
 	unique_proposal_purchase_id string `json:"unique_proposal_purchase_id"`								
 	ProposalID string `json:"ProposalID"`	
