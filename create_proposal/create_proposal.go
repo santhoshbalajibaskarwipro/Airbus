@@ -1,7 +1,7 @@
 //Last update on 21st nov by Santhosh
 package main
 
-import (
+import ( 
 "errors"
 "fmt"
 "strconv"
@@ -42,7 +42,7 @@ type proposal struct{
 	
 }
 // ============================================================================================================================
-// Main - start the chaincode for Form management
+// Main   - start the chaincode for Form management
 // ============================================================================================================================
 func main() {			
 	err := shim.Start(new(ManageProposal))
@@ -189,7 +189,8 @@ func (t *ManageProposal) create_proposal_id(stub shim.ChaincodeStubInterface, ar
 		`"total_qty": "` + total_qty + `" , `+ 
 		`"status": "` + status + `"` +	
 	
-		`}`
+		`}` 
+	
 	
 		fmt.Println("input: " + input)
 		fmt.Print("input in bytes array: ")
