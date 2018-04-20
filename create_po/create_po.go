@@ -4,7 +4,7 @@
 
 package main
 
-import (    
+import (     
 "errors"
 "fmt"
 "strconv"
